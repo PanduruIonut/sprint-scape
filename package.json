@@ -10,6 +10,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.6.1",
+    "@clerk/nextjs": "^4.17.1",
+    "@emotion/react": "^11.10.8",
+    "@emotion/styled": "^11.10.8",
     "@prisma/client": "^4.13.0",
     "@t3-oss/env-nextjs": "^0.2.2",
     "@tanstack/react-query": "^4.29.5",
@@ -17,6 +21,7 @@
     "@trpc/next": "^10.25.0",
     "@trpc/react-query": "^10.25.0",
     "@trpc/server": "^10.25.0",
+    "framer-motion": "^10.12.8",
     "next": "13.3.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
