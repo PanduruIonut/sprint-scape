@@ -1,5 +1,4 @@
 
-export const handler = (req: Request, res: Response) => {
+export default function handler(req: Request, res: Response) {
     console.log(req, res)
-
 }
