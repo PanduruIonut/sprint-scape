@@ -4,8 +4,8 @@ import { usersRouter } from '@/server/api/routers/users'
 
 const handler: NextApiHandler = async (req, res) => {
     try {
-        const evt = req.body as WebhookEvent
-        const event = JSON.parse(evt) as WebhookEvent
+        const eventString = JSON.stringify(req.body)
+        const event = JSON.parse(eventString) as WebhookEvent
         if (event.type !== 'user.created') {
             throw new Error(`Unsupported event type: ${event.type}`)
         }
