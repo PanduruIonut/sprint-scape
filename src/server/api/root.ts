@@ -1,5 +1,4 @@
 import { createTRPCRouter } from "@/server/api/trpc";
-import { exampleRouter } from "@/server/api/routers/example";
 import { oranisationsRouter } from "@/server/api/routers/organisations";
 
 /**
@@ -8,7 +7,6 @@ import { oranisationsRouter } from "@/server/api/routers/organisations";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  example: exampleRouter,
   organisation: oranisationsRouter,
 });
 
