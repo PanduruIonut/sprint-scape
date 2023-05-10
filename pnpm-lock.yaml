@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@chakra-ui/react': ^2.6.1
+  '@clerk/clerk-sdk-node': ^4.8.7
   '@clerk/nextjs': ^4.17.1
   '@emotion/react': ^11.10.8
   '@emotion/styled': ^11.10.8
@@ -32,6 +33,7 @@ specifiers:
 
 dependencies:
   '@chakra-ui/react': 2.6.1_z52ykbnd5espmij3rsnpsl4bva
+  '@clerk/clerk-sdk-node': 4.8.7
   '@clerk/nextjs': 4.17.1_vwuoxxmoeydgew5hhkavebkk4e
   '@emotion/react': 11.10.8_3pi6y6cylzraaxxtldk4o6b3zi
   '@emotion/styled': 11.10.8_2gvxmecv2kdsyn3t37lq4pot4i
