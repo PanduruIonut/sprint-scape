@@ -1,4 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import type { WebhookEvent } from '@clerk/clerk-sdk-node'
+import { type NextApiHandler } from 'next'
 
-export default function handler(req: Request, res: Response) {
-    console.log(req, res)
+const handler: NextApiHandler = (req) => {
+    const evt = req.body.evt as WebhookEvent
+    console.log(evt)
 }
+
+export default handler
