@@ -7,8 +7,10 @@ const handler: NextApiHandler = async (req, res) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         const event = JSON.parse(req.body) as WebhookEvent
         console.log(event)
-        if (event.type !== 'user.created') {
-            throw new Error(`Unsupported event type: ${event.type}`)
+        if (event.type !== 'user.created' && event.type !== 'user.updated') {
+            throw new Error(
+                `Invalid event type: ${event.type} for user webhook`
+            )
         }
         const { id, email_addresses } = event.data
         if (!id || !email_addresses?.[0]?.email_address) {
@@ -17,17 +19,25 @@ const handler: NextApiHandler = async (req, res) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore: Argument of type 'bla' is not assignable to parameter of type 'yolo'.
         const caller = usersRouter.createCaller({})
-        const user = await caller.create({
-            content: {
-                id,
-                email: email_addresses[0].email_address,
-            },
-        })
+        let user
+        if (event.type === 'user.created') {
+            user = await caller.create({
+                content: {
+                    id,
+                    email: email_addresses[0].email_address,
+                },
+            })
+        } else {
+            user = await caller.update({
+                content: {
+                    id,
+                    email: email_addresses[0].email_address,
+                },
+            })
+        }
         res.status(200).json(user)
     } catch (error) {
-        error instanceof Error
-            ? res.status(400).json(error)
-            : res.status(400).json(`Unknown error`)
+        res.status(400).json(error instanceof Error ? error : 'Unknown error')
     }
 }
 
