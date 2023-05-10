@@ -4,9 +4,11 @@ import Head from "next/head";
 import Link from "next/link";
 
 import { api } from "@/utils/api";
+import { useUser } from "@clerk/nextjs";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const user = useUser();
+  const { data } = api.organisation.getAll.useQuery();
 
   return (
     <>
@@ -45,7 +47,8 @@ const Home: NextPage = () => {
             </Link>
           </div>
           <p className={styles.showcaseText}>
-            {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+            {data?.map((item) => item.name).join(", ")}
+
           </p>
         </div>
       </main>
