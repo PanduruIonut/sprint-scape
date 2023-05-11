@@ -39,13 +39,17 @@ export const usersRouter = createTRPCRouter({
             })
         )
         .mutation(async ({ ctx, input }) => {
-            console.log(ctx, input)
-            const user = await prisma.user.update({
+            const user = await prisma.user.upsert({
                 where: {
                     id: ctx.userId ? ctx.userId : input.content.id,
                 },
-                data: {
+                update: {
                     email: input.content.email,
+                },
+                create: {
+                    id: ctx.userId ? ctx.userId : input.content.id,
+                    email: input.content.email,
+                    type: 'USER',
                 },
             })
 
