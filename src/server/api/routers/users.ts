@@ -19,8 +19,7 @@ export const usersRouter = createTRPCRouter({
             })
         )
         .mutation(async ({ ctx, input }) => {
-            console.log(ctx, input)
-            const user = await prisma.user.create({
+            const user = await ctx.prisma.user.create({
                 data: {
                     id: ctx.userId ? ctx.userId : input.content.id,
                     email: input.content.email,

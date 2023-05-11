@@ -1,6 +1,7 @@
 import type { WebhookEvent } from '@clerk/clerk-sdk-node'
 import { type NextApiHandler } from 'next'
 import { usersRouter } from '@/server/api/routers/users'
+import { createTRPCContext } from '@/server/api/trpc'
 
 const handler: NextApiHandler = async (req, res) => {
     try {
@@ -16,9 +17,8 @@ const handler: NextApiHandler = async (req, res) => {
         if (!id || !email_addresses?.[0]?.email_address) {
             throw new Error(`Invalid event data: ${JSON.stringify(event.data)}`)
         }
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore: Argument of type 'bla' is not assignable to parameter of type 'yolo'.
-        const caller = usersRouter.createCaller({})
+        const ctx = createTRPCContext({ req, res })
+        const caller = usersRouter.createCaller(ctx)
         let user
         if (event.type === 'user.created') {
             user = await caller.create({
