@@ -5,10 +5,11 @@ import { createTRPCContext } from '@/server/api/trpc'
 
 const handler: NextApiHandler = async (req, res) => {
     try {
-        console.log(req.body)
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        const event = JSON.parse(req.body) as WebhookEvent
+        const event = req.body as WebhookEvent
+        console.log(typeof event)
         console.log(event)
+        console.log(req.body)
+
         if (event.type !== 'user.created' && event.type !== 'user.updated') {
             throw new Error(
                 `Invalid event type: ${event.type} for user webhook`
