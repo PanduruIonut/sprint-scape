@@ -1,6 +1,16 @@
 import { z } from 'zod'
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
 import { prisma } from '@/server/db'
+import { Ratelimit } from '@upstash/ratelimit' // for deno: see above
+import { Redis } from '@upstash/redis'
+import { TRPCError } from '@trpc/server'
+
+const ratelimit = new Ratelimit({
+    redis: Redis.fromEnv(),
+    limiter: Ratelimit.slidingWindow(10, '10 s'),
+    analytics: true,
+    prefix: '@upstash/ratelimit',
+})
 
 export const usersRouter = createTRPCRouter({
     getAll: publicProcedure.query(({ ctx }) => {
@@ -19,6 +29,12 @@ export const usersRouter = createTRPCRouter({
             })
         )
         .mutation(async ({ ctx, input }) => {
+            const { success } = await ratelimit.limit(
+                ctx.userId ? ctx.userId : input.content.id
+            )
+            if (!success) {
+                throw new TRPCError({ code: 'TOO_MANY_REQUESTS' })
+            }
             const user = await ctx.prisma.user.create({
                 data: {
                     id: ctx.userId ? ctx.userId : input.content.id,
