@@ -5,6 +5,7 @@ import { createTRPCContext } from '@/server/api/trpc'
 
 const handler: NextApiHandler = async (req, res) => {
     try {
+        console.log(req.body)
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         const event = JSON.parse(req.body) as WebhookEvent
         console.log(event)
