@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Button, Card, CardBody, CardFooter, CardHeader, Center, FormControl, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react";
 import { useOrganizationList } from "@clerk/nextjs";
-import { Field, Form, Formik, type FormikProps } from "formik";
+import { Field, type FieldInputProps, Form, Formik, type FormikProps } from "formik";
 
 
 export default function CreateOrganization() {
@@ -59,12 +59,18 @@ export default function CreateOrganization() {
         return error
     }
 
+    type NewType = {
+        name: string;
+        email: string;
+        phoneNumber: string;
+    };
+
     return (
 
         <Center height='100vh' width='100vw'>
-            <Card boxShadow='lg' variant='outline' align='center'>
+            <Card boxShadow='lg' variant='outline' align='center' minWidth='md'>
                 <CardHeader>Create your organization</CardHeader>
-                <CardBody>
+                <CardBody minWidth='md' >
                     <Formik
                         initialValues={{}}
                         onSubmit={(values: Values, actions) => {
@@ -74,7 +80,7 @@ export default function CreateOrganization() {
                         {(props: FormikProps<any>) => (
                             <Form>
                                 <Field name='name' validate={validateName} >
-                                    {({ field, form }) => (
+                                    {({ field, form }: { field: FieldInputProps<string>, form: any }) => (
                                         <FormControl isInvalid={form.errors.name && form.touched.name}>
                                             <FormLabel>Name</FormLabel>
                                             <Input {...field} placeholder='name' />
@@ -83,7 +89,7 @@ export default function CreateOrganization() {
                                     )}
                                 </Field>
                                 <Field name='email' validate={validateEmail}>
-                                    {({ field, form }) => (
+                                    {({ field, form }: { field: FieldInputProps<string>, form: any }) => (
                                         <FormControl isInvalid={form.errors.email && form.touched.email}>
                                             <FormLabel>Email</FormLabel>
                                             <Input {...field} placeholder='email' />
@@ -92,7 +98,7 @@ export default function CreateOrganization() {
                                     )}
                                 </Field>
                                 <Field name='phoneNumber' validate={validatePhoneNumber}>
-                                    {({ field, form }) => (
+                                    {({ field, form }: { field: FieldInputProps<string>, form: any }) => (
                                         <FormControl isInvalid={form.errors.phoneNumber && form.touched.phoneNumber}>
                                             <FormLabel>Phone Number</FormLabel>
                                             <Input {...field} placeholder='phone number' />
