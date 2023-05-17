@@ -30,6 +30,7 @@ model Organisation {
   id        String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  created_by String?
   name      String   @unique
   users     User[]
   facilities Facility[]
