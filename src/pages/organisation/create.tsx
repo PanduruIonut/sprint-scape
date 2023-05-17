@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Button, Card, CardBody, CardFooter, CardHeader, Center, FormControl, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react";
+import { Button, Card, CardBody, CardHeader, Center, FormControl, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react";
 import { useOrganizationList } from "@clerk/nextjs";
 import { Field, type FieldInputProps, Form, Formik, type FormikProps } from "formik";
 
@@ -59,12 +58,6 @@ export default function CreateOrganization() {
         return error
     }
 
-    type NewType = {
-        name: string;
-        email: string;
-        phoneNumber: string;
-    };
-
     return (
 
         <Center height='100vh' width='100vw'>
@@ -73,7 +66,7 @@ export default function CreateOrganization() {
                 <CardBody minWidth='md' >
                     <Formik
                         initialValues={{}}
-                        onSubmit={(values: Values, actions) => {
+                        onSubmit={(values: Values, _actions) => {
                             handleSubmit(values.name)
                         }}
                     >
