@@ -5,6 +5,7 @@ import { api } from "@/utils/api";
 
 import "@/styles/globals.css";
 import { useRouter } from "next/router";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const publicPages = ["/sign-in/[[...index]]", "/sign-up/[[...index]]"];
 
@@ -15,18 +16,20 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   const isPublicPage = publicPages.includes(pathname);
   return (
     <ClerkProvider {...pageProps}>
-      {isPublicPage ? (
-        <Component {...pageProps} />
-      ) : (
-        <>
-          <SignedIn>
-            <Component {...pageProps} />
-          </SignedIn>
-          <SignedOut>
-            <RedirectToSignIn />
-          </SignedOut>
-        </>
-      )}
+      <ChakraProvider>
+        {isPublicPage ? (
+          <Component {...pageProps} />
+        ) : (
+          <>
+            <SignedIn>
+              <Component {...pageProps} />
+            </SignedIn>
+            <SignedOut>
+              <RedirectToSignIn />
+            </SignedOut>
+          </>
+        )}
+      </ChakraProvider>
     </ClerkProvider>
   )
 };
