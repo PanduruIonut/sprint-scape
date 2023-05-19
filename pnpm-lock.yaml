@@ -4,6 +4,7 @@ specifiers:
   '@chakra-ui/react': ^2.6.1
   '@clerk/clerk-sdk-node': ^4.8.7
   '@clerk/nextjs': ^4.17.1
+  '@clerk/types': ^3.38.0
   '@emotion/react': ^11.10.8
   '@emotion/styled': ^11.10.8
   '@prisma/client': ^4.13.0
@@ -39,6 +40,7 @@ dependencies:
   '@chakra-ui/react': 2.6.1_z52ykbnd5espmij3rsnpsl4bva
   '@clerk/clerk-sdk-node': 4.8.7
   '@clerk/nextjs': 4.17.1_vwuoxxmoeydgew5hhkavebkk4e
+  '@clerk/types': 3.38.0
   '@emotion/react': 11.10.8_3pi6y6cylzraaxxtldk4o6b3zi
   '@emotion/styled': 11.10.8_2gvxmecv2kdsyn3t37lq4pot4i
   '@prisma/client': 4.13.0_prisma@4.13.0
@@ -1201,7 +1203,7 @@ packages:
     resolution: {integrity: sha512-d3YoDBK56XLdoAkLq7wCyY9B3Qxd1DG0+snXTXE7qWQtG6AFJEQ7FKFRFEsNzMZaWRfiiE9jQ9GJMjWEVvLAUA==}
     engines: {node: '>=14'}
     dependencies:
-      '@clerk/types': 3.36.0
+      '@clerk/types': 3.38.0
       '@peculiar/webcrypto': 1.4.1
       '@types/node': 16.18.6
       deepmerge: 4.2.2
@@ -1217,7 +1219,7 @@ packages:
       react: '>=16'
     dependencies:
       '@clerk/shared': 0.15.7_react@18.2.0
-      '@clerk/types': 3.36.0
+      '@clerk/types': 3.38.0
       react: 18.2.0
       swr: 1.3.0_react@18.2.0
       tslib: 2.4.1
@@ -1228,7 +1230,7 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       '@clerk/backend': 0.18.0
-      '@clerk/types': 3.36.0
+      '@clerk/types': 3.38.0
       '@types/cookies': 0.7.7
       '@types/express': 4.17.14
       '@types/node-fetch': 2.6.2
@@ -1249,7 +1251,7 @@ packages:
       '@clerk/backend': 0.18.0
       '@clerk/clerk-react': 4.15.4_react@18.2.0
       '@clerk/clerk-sdk-node': 4.8.7
-      '@clerk/types': 3.36.0
+      '@clerk/types': 3.38.0
       next: 13.3.4_biqbaboplfbrettd7655fr4n2y
       path-to-regexp: 6.2.1
       react: 18.2.0
@@ -1265,8 +1267,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@clerk/types/3.36.0:
-    resolution: {integrity: sha512-bsOIud1h3Tkvd9F0CGTqqD7NicvAF3O0hFQ2lGjuETFrNqV8houorrGM9d0ZMU72vsyzwTQ/Jw8vB4mIHIXHMQ==}
+  /@clerk/types/3.38.0:
+    resolution: {integrity: sha512-2jOXfcfBwTesAneK4j+KcaFBX74wCBRtDA0AJ4bvMpTx7rhxN+Zdbd7kStOUbTsbAQXVw/RlGRuvGerV829jxA==}
     engines: {node: '>=14'}
     dependencies:
       csstype: 3.1.1
