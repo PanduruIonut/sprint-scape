@@ -1,5 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -43,8 +41,33 @@ model Facility {
   name      String   @unique
   organisation Organisation? @relation(fields: [organisationId], references: [id])
   organisationId String?
+  Venues Venue[]
   bookings  Booking[]
+  latitude String?
+  longitude String?
+  address String?
+  description String?
+  type String?
   @@index([organisationId])
+}
+
+model Venue {
+  id        String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+  facility Facility? @relation(fields: [facilityId], references: [id])
+  facilityId String?
+  schedules Schedule[]
+  bookings  Booking[]
+  latitude String?
+  longitude String?
+  address String?
+  description String?
+  type VenueType
+  sportType SportVenueType?
+  maxPlayersCapacity Int?
+  @@index ([facilityId])
 }
 
 model Booking {
@@ -55,14 +78,44 @@ model Booking {
   userId        String
   facility      Facility @relation(fields: [facilityId], references: [id])
   facilityId    String
+  venues       Venue @relation(fields: [venueId], references: [id])
+  venueId       String
   startTime     DateTime
   endTime       DateTime
 
   @@index([userId])
   @@index([facilityId])
+  @@index([venueId])
+}
+
+model Schedule {
+  id          String    @id
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  venue       Venue     @relation(fields: [venueId], references: [id])
+  venueId     String
+  dayOfWeek   Int
+  startTime   DateTime
+  endTime     DateTime
+
+  @@index([venueId])
 }
 
 enum UserType {
   ADMIN
   USER
+}
+
+enum VenueType {
+  INDOOR
+  OUTDOOR
+}
+
+enum SportVenueType {
+  Football
+  Voley
+  Basketball
+  Tennis
+  Badminton
+  Handball
 }
