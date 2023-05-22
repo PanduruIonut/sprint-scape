@@ -1,6 +1,10 @@
 import { z } from 'zod'
 
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
+import {
+    createTRPCRouter,
+    privateProcedure,
+    publicProcedure,
+} from '@/server/api/trpc'
 import { TRPCError } from '@trpc/server'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
@@ -23,7 +27,7 @@ export const oranisationsRouter = createTRPCRouter({
     getAll: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.organisation.findMany()
     }),
-    create: publicProcedure
+    create: privateProcedure
         .input(
             z.object({
                 content: z.object({
@@ -34,9 +38,7 @@ export const oranisationsRouter = createTRPCRouter({
             })
         )
         .mutation(async ({ ctx, input }) => {
-            const { success } = await ratelimit.limit(
-                ctx.userId ? ctx.userId : input.content.id
-            )
+            const { success } = await ratelimit.limit(ctx.userId)
             if (!success) {
                 throw new TRPCError({ code: 'TOO_MANY_REQUESTS' })
             }
@@ -50,7 +52,7 @@ export const oranisationsRouter = createTRPCRouter({
 
             return user
         }),
-    update: publicProcedure
+    update: privateProcedure
         .input(
             z.object({
                 content: z.object({
