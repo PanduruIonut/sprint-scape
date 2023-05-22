@@ -17,7 +17,7 @@ export default function InvitationList() {
         <div style={{ paddingTop: '20px' }}>
             <h2>Invite member: </h2>
             <InviteMember />
-            <div style={{ textAlign: 'center' }}> {invitationList.length === 0 ? (
+            <div style={{ textAlign: 'center', margin: '10px' }}> {invitationList.length === 0 ? (
                 <div style={{ fontStyle: 'italic', fontSize: '13px' }}>No pending invitations</div>
             ) : (
                 <div>
