@@ -35,12 +35,12 @@ model Organisation {
 }
 
 model Facility {
-  id        String   @id @default(uuid())
+  id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String   @unique
   email    String?
-  organisations Organisation? @relation(fields: [organisationId], references: [id])
+  organisation Organisation? @relation(fields: [organisationId], references: [id])
   organisationId String?
   Venues Venue[]
   bookings  Booking[]

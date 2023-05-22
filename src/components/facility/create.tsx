@@ -24,9 +24,10 @@ export default function CreateFacility() {
     };
 
     const { organization } = useOrganization();
-    const { mutate, isLoading: isPosting } = api.facility.create.useMutation({
+    const { mutate, isLoading: isPosting, data } = api.facility.create.useMutation({
         onSuccess: () => {
             console.log("Success")
+            toast.success(`Facility created! ${data ? data.name : ''}`); 
         },
         onError: (e: any) => {
             const errorMessage = e.data?.zodError?.fieldErrors.content;
@@ -66,8 +67,9 @@ export default function CreateFacility() {
                                 image: '',
 
                             }}
-                            onSubmit={(values: FaciltyPayload, _actions) => {
+                            onSubmit={(values: FaciltyPayload, { resetForm }) => {
                                 void onSubmit(values)
+                                resetForm()
                             }}>
                             <Form style={{ gap: '10px', display: 'flex', flexDirection: 'column' }}>
                                 <Field name="name" type="text">
