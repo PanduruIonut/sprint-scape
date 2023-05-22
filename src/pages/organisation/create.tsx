@@ -61,7 +61,7 @@ export default function CreateOrganization() {
     return (
 
         <Center height='100vh' width='100vw'>
-            <Card boxShadow='lg' variant='outline' align='center' minWidth='md'>
+            <Card boxShadow='2xl' variant='outline' align='center' minWidth='md'>
                 <CardHeader>Create your organization</CardHeader>
                 <CardBody minWidth='md' >
                     <Formik
