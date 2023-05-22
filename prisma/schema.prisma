@@ -18,7 +18,7 @@ model User {
   name      String?
   number    String?
   type      UserType
-  organisation Organisation? @relation(fields: [organisationId], references: [id])
+  organisations Organisation? @relation(fields: [organisationId], references: [id])
   organisationId String?
   bookings  Booking[]
   @@index([organisationId])
@@ -35,11 +35,12 @@ model Organisation {
 }
 
 model Facility {
-  id        String   @unique
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String   @unique
-  organisation Organisation? @relation(fields: [organisationId], references: [id])
+  email    String?
+  organisations Organisation? @relation(fields: [organisationId], references: [id])
   organisationId String?
   Venues Venue[]
   bookings  Booking[]
@@ -47,7 +48,6 @@ model Facility {
   longitude String?
   address String?
   description String?
-  type String?
   @@index([organisationId])
 }
 
