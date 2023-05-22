@@ -6,6 +6,7 @@ import { api } from "@/utils/api";
 import "@/styles/globals.css";
 import { useRouter } from "next/router";
 import { ChakraProvider } from "@chakra-ui/react";
+import { Toaster } from "react-hot-toast";
 
 const publicPages = ["/sign-in/[[...index]]", "/sign-up/[[...index]]"];
 
@@ -29,6 +30,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             </SignedOut>
           </>
         )}
+        <Toaster position="bottom-center" />
       </ChakraProvider>
     </ClerkProvider>
   )

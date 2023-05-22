@@ -26,7 +26,6 @@ export const facilitiesRouter = createTRPCRouter({
                     address: z.string(),
                     email: z.string().email(),
                     description: z.string(),
-                    image: z.string(),
                     latitude: z.string(),
                     longitude: z.string(),
                     organisationId: z.string(),
@@ -39,7 +38,19 @@ export const facilitiesRouter = createTRPCRouter({
                 throw new TRPCError({ code: 'TOO_MANY_REQUESTS' })
             }
             const facility = await ctx.prisma.facility.create({
-                data: input.content,
+                data: {
+                    name: input.content.name,
+                    address: input.content.address,
+                    email: input.content.email,
+                    description: input.content.description,
+                    latitude: input.content.latitude,
+                    longitude: input.content.longitude,
+                    organisation: {
+                        connect: {
+                            id: input.content.organisationId,
+                        },
+                    },
+                },
             })
 
             return facility
