@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -23,9 +24,10 @@ export default function Switcher() {
         return null;
     }
 
-    const handleOrgChange = (e: any) => {
-        console.log("Setting active organization", e.target.value)
-        const organisationFromList = organizationList.find((org) => org.organization.id === e.target.value);
+    const handleOrgChange = (event: React.FormEvent<HTMLSelectElement>) => {
+        const element = event.target as HTMLSelectElement;
+        console.log("Setting active organization", element.value)
+        const organisationFromList = organizationList.find((org) => org.organization.id === element.value);
         if (!organisationFromList) return console.log("No organisation from list")
         setSelectedOrganisation(organisationFromList.organization);
         void setActive({ organization: organisationFromList.organization });

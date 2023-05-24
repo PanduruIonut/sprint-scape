@@ -1,13 +1,10 @@
 import styles from "./index.module.css";
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 
 import { api } from "@/utils/api";
-import { useUser } from "@clerk/nextjs";
 
 const Home: NextPage = () => {
-  const user = useUser();
   const { data } = api.organisation.getAll.useQuery();
 
   return (
