@@ -2,10 +2,10 @@ import styles from "./index.module.css";
 import { type NextPage } from "next";
 import Head from "next/head";
 
-import { api } from "@/utils/api";
+import { Map } from "@/components/map";
 
 const Home: NextPage = () => {
-  const { data } = api.organisation.getAll.useQuery();
+  const latLong = { lat: 51.5, lng: -0.1 } as google.maps.LatLngLiteral;
 
   return (
     <>
@@ -19,10 +19,7 @@ const Home: NextPage = () => {
           <h1 className={styles.title}>
             Sprint <span className={styles.pinkSpan}>Scape</span> App
           </h1>
-          <p className={styles.showcaseText}>
-            {data?.map((item) => item.name).join(", ")}
-
-          </p>
+          <Map center={latLong} zoom={5} />
         </div>
       </main>
     </>

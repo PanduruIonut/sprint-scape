@@ -7,6 +7,8 @@ import "@/styles/globals.css";
 import { useRouter } from "next/router";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Toaster } from "react-hot-toast";
+import { Wrapper } from "@googlemaps/react-wrapper";
+import { env } from "@/env.mjs";
 
 const publicPages = ["/sign-in/[[...index]]", "/sign-up/[[...index]]"];
 
@@ -22,12 +24,14 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <Component {...pageProps} />
         ) : (
           <>
-            <SignedIn>
-              <Component {...pageProps} />
-            </SignedIn>
-            <SignedOut>
-              <RedirectToSignIn />
-            </SignedOut>
+              <Wrapper apiKey={env.NEXT_PUBLIC_GOOGLE_MAPS_API}>
+                <SignedIn>
+                  <Component {...pageProps} />
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </Wrapper>
           </>
         )}
         <Toaster position="bottom-center" />
