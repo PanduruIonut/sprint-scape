@@ -2,46 +2,47 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useOrganization, useOrganizationList } from "@clerk/nextjs";
-import { useRouter } from "next/router";
 import { Card, Center, Divider, Select } from "@chakra-ui/react";
 import MemberList from "@/components/memberList";
 import InvitationList from "@/components/invitationList";
 import CreateFacility from "@/components/facility/create";
-import { useEffect } from "react";
+import { useState } from "react";
+import Facilities from "@/components/facility/facilities";
+import { type OrganizationResource } from "@clerk/types";
 
 export default function Switcher() {
-    const router = useRouter();
     const { setActive, organizationList, isLoaded } = useOrganizationList();
-    const { organization, ...rest } = useOrganization();
-
-    useEffect(() => {
-        if (router.query.selected && isLoaded) {
-            void setActive({ organization: router.query.selected as string });
-        }
-    }, [isLoaded, router.query.selected, setActive]);
+    const { organization } = useOrganization();
+    const [selectedOrganisation, setSelectedOrganisation] = useState<OrganizationResource>();
 
     if (!isLoaded) {
         return null;
     }
 
-    const handleOrgChange = (e: any) => {
-        void setActive({ organization: e.value });
-    };
-
     if (!organization) {
         return null;
     }
 
+    const handleOrgChange = (e: any) => {
+        console.log("Setting active organization", e.target.value)
+        const organisationFromList = organizationList.find((org) => org.organization.id === e.target.value);
+        if (!organisationFromList) return console.log("No organisation from list")
+        setSelectedOrganisation(organisationFromList.organization);
+        void setActive({ organization: organisationFromList.organization });
+    };
+
     return (
         <Center height='100vh' width='100vw'>
             <Card boxShadow='2xl' variant='outline' align='center' minWidth='md'>
-                <Select>
+                <Select
+                    value={selectedOrganisation?.id}
+                    onChange={handleOrgChange}
+                >
                     {createOrganizationOptions(organizationList).map((option: any) => (
                         <option
                             key={option.value}
                             value={option.value}
                             defaultChecked={option.value === organization.id}
-                            onChange={handleOrgChange}
                         >
                             {option.label}
                         </option>
@@ -50,6 +51,7 @@ export default function Switcher() {
                 <Divider orientation='horizontal' />
                 <OrganizationInfo />
                 <CreateFacility />
+                <Facilities />
             </Card>
         </Center>
     );
