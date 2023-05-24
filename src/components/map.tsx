@@ -5,9 +5,11 @@ import React, { useEffect, useRef } from "react";
 export function Map({
     center,
     zoom,
+    markers
 }: {
     center: google.maps.LatLngLiteral;
     zoom: number;
+        markers: (void | google.maps.LatLngLiteral)[];
 }) {
     const ref = useRef<HTMLDivElement>(null);
 
@@ -19,6 +21,13 @@ export function Map({
             zoom,
         });
         const infoWindow = new google.maps.InfoWindow();
+        markers?.forEach((marker) => {
+            if (!marker) return console.log("No marker")
+            new google.maps.Marker({
+                position: marker,
+                map,
+            });
+        });
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position: GeolocationPosition) => {
