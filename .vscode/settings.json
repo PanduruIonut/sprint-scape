@@ -1,8 +1,14 @@
 {
     "cSpell.words": [
         "chakra",
+        "Facilty",
         "Formik",
         "nextjs",
-        "organisation"
+        "organisation",
+        "ratelimit",
+        "superjson",
+        "tanstack",
+        "trpc",
+        "upstash"
     ]
 }

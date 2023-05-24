@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Button, Card, CardBody, CardHeader, Center, FormControl, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react";
 import { useOrganizationList } from "@clerk/nextjs";
 import { Field, type FieldInputProps, Form, Formik, type FormikProps } from "formik";
@@ -10,7 +7,7 @@ export default function CreateOrganization() {
     interface Values {
         name: string;
         email: string;
-        number: number;
+        phoneNumber: string;
     }
     const { createOrganization, setActive, isLoaded } = useOrganizationList();
 
@@ -66,16 +63,20 @@ export default function CreateOrganization() {
                 <CardHeader>Create your organization</CardHeader>
                 <CardBody minWidth='md' >
                     <Formik
-                        initialValues={{}}
+                        initialValues={{
+                            name: '',
+                            email: '',
+                            phoneNumber: ''
+                        }}
                         onSubmit={(values: Values, _actions) => {
                             handleSubmit(values.name)
                         }}
                     >
-                        {(props: FormikProps<any>) => (
+                        {(props: FormikProps<Values>) => (
                             <Form>
                                 <Field name='name' validate={validateName} >
-                                    {({ field, form }: { field: FieldInputProps<string>, form: any }) => (
-                                        <FormControl isInvalid={form.errors.name && form.touched.name}>
+                                    {({ field, form }: { field: FieldInputProps<string>, form: FormikProps<Values> }) => (
+                                        <FormControl isInvalid={!!form.errors.name && !!form.touched.name}>
                                             <FormLabel>Name</FormLabel>
                                             <Input {...field} placeholder='name' />
                                             <FormErrorMessage>{form.errors.name}</FormErrorMessage>
@@ -83,8 +84,8 @@ export default function CreateOrganization() {
                                     )}
                                 </Field>
                                 <Field name='email' validate={validateEmail}>
-                                    {({ field, form }: { field: FieldInputProps<string>, form: any }) => (
-                                        <FormControl isInvalid={form.errors.email && form.touched.email}>
+                                    {({ field, form }: { field: FieldInputProps<string>, form: FormikProps<Values> }) => (
+                                        <FormControl isInvalid={!!form.errors.email && !!form.touched.email}>
                                             <FormLabel>Email</FormLabel>
                                             <Input {...field} placeholder='email' />
                                             <FormErrorMessage>{form.errors.email}</FormErrorMessage>
@@ -92,8 +93,8 @@ export default function CreateOrganization() {
                                     )}
                                 </Field>
                                 <Field name='phoneNumber' validate={validatePhoneNumber}>
-                                    {({ field, form }: { field: FieldInputProps<string>, form: any }) => (
-                                        <FormControl isInvalid={form.errors.phoneNumber && form.touched.phoneNumber}>
+                                    {({ field, form }: { field: FieldInputProps<string>, form: FormikProps<Values> }) => (
+                                        <FormControl isInvalid={!!form.errors.phoneNumber && !!form.touched.phoneNumber}>
                                             <FormLabel>Phone Number</FormLabel>
                                             <Input {...field} placeholder='phone number' />
                                             <FormErrorMessage>{form.errors.phoneNumber}</FormErrorMessage>

@@ -1,11 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable react/jsx-no-undef */
 import { useState } from "react";
 import { useOrganization } from "@clerk/nextjs";
-import { Field, type FieldInputProps, Form, Formik } from "formik";
+import { Field, type FieldInputProps, Form, Formik, type FormikProps } from "formik";
 import { Button, FormControl, FormErrorMessage, Input, Radio, RadioGroup, Stack } from "@chakra-ui/react";
 
 export default function InvitationList() {
@@ -40,7 +35,6 @@ export default function InvitationList() {
 
 const InviteMember = () => {
     const { organization } = useOrganization();
-    const [emailAddress, setEmailAddress] = useState("");
     const [role, setRole] = useState<"basic_member" | "admin">("basic_member");
     const [disabled, setDisabled] = useState(false);
 
@@ -48,7 +42,6 @@ const InviteMember = () => {
         setDisabled(true);
         if (!organization) return console.log("No organization")
         await organization.inviteMember({ emailAddress: email, role });
-        setEmailAddress("");
         setRole("basic_member");
         setDisabled(false);
     };
@@ -74,8 +67,8 @@ const InviteMember = () => {
             }}>
             <Form>
                 <Field name='email' validate={validateEmail}>
-                    {({ field, form }: { field: FieldInputProps<string>, form: any }) => (
-                        <FormControl isInvalid={form.errors.email && form.touched.email}>
+                    {({ field, form }: { field: FieldInputProps<string>, form: FormikProps<InvitePayload> }) => (
+                        <FormControl isInvalid={!!form.errors.email && !!form.touched.email}>
                             <Input {...field} placeholder='email' />
                             <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                         </FormControl>

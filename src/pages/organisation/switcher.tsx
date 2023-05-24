@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useOrganization, useOrganizationList } from "@clerk/nextjs";
 import { Card, Center, Divider, Select } from "@chakra-ui/react";
 import MemberList from "@/components/memberList";
@@ -9,7 +5,7 @@ import InvitationList from "@/components/invitationList";
 import CreateFacility from "@/components/facility/create";
 import { useState } from "react";
 import Facilities from "@/components/facility/facilities";
-import { type OrganizationResource } from "@clerk/types";
+import { type OrganizationMembershipResource, type OrganizationResource } from "@clerk/types";
 
 export default function Switcher() {
     const { setActive, organizationList, isLoaded } = useOrganizationList();
@@ -40,7 +36,7 @@ export default function Switcher() {
                     value={selectedOrganisation?.id}
                     onChange={handleOrgChange}
                 >
-                    {createOrganizationOptions(organizationList).map((option: any) => (
+                    {createOrganizationOptions(organizationList)?.map((option) => (
                         <option
                             key={option.value}
                             value={option.value}
@@ -80,8 +76,11 @@ function OrganizationInfo() {
 }
 
 
-function createOrganizationOptions(organizationList: any): any {
-    return organizationList.map(({ organization }: any) => ({
+function createOrganizationOptions(organizationList: {
+    membership: OrganizationMembershipResource;
+    organization: OrganizationResource;
+}[] | undefined) {
+    return organizationList?.map(({ organization }) => ({
         value: organization.id,
         label: organization.name,
     }));

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 import { Ratelimit } from '@upstash/ratelimit'
@@ -23,7 +21,6 @@ export const facilitiesRouter = createTRPCRouter({
     getAllByOrganizationId: publicProcedure
         .input(z.object({ organisationId: z.string() }))
         .query(({ ctx, input }) => {
-            // const { organisationId } = ctx.req.query
             return ctx.prisma.facility.findMany({
                 where: {
                     organisationId: input.organisationId,
