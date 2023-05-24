@@ -41,6 +41,7 @@ export default function CreateFacility() {
 
     const onSubmit = (payload: FaciltyPayload) => {
         if (!organization) return console.log("No organization")
+        payload.organisationId = organization.id;
         mutate({ content: payload });
     };
 
