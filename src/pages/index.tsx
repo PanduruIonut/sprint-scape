@@ -2,21 +2,9 @@ import styles from "./index.module.css";
 import Head from "next/head";
 
 import { Map } from "@/components/map";
-import { api } from "@/utils/api";
-import { type Facility } from "@prisma/client";
 
 function Home() {
   const latLong = { lat: 51.5, lng: -0.1 } as google.maps.LatLngLiteral;
-  const { data } = api.facility.getAll.useQuery();
-
-  if (!data)
-    return console.log("No facilities");
-  const facilitiesLocations = data.map((facility: Facility) => {
-    if (!facility.latitude || !facility.longitude)
-      return console.log("No lat or long");
-    return { lat: parseFloat(facility.latitude), lng: parseFloat(facility.longitude) } as google.maps.LatLngLiteral;
-  });
-
 
   return (
     <>
@@ -30,7 +18,7 @@ function Home() {
           <h1 className={styles.title}>
             Sprint <span className={styles.pinkSpan}>Scape</span> App
           </h1>
-          <Map center={latLong} zoom={5} markers={facilitiesLocations} />
+          <Map center={latLong} zoom={5} />
         </div>
       </main>
     </>
