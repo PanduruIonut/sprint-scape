@@ -18,6 +18,7 @@ export const env = createEnv({
      */
     client: {
         NEXT_PUBLIC_GOOGLE_MAPS_API: z.string(),
+        NEXT_PUBLIC_CLERK_WEBHOOK_SECRET: z.string(),
         // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
     },
 
@@ -29,6 +30,7 @@ export const env = createEnv({
         DATABASE_URL: process.env.DATABASE_URL,
         NODE_ENV: process.env.NODE_ENV,
         NEXT_PUBLIC_GOOGLE_MAPS_API: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API,
+        NEXT_PUBLIC_CLERK_WEBHOOK_SECRET: process.env.NEXT_PUBLIC_CLERK_WEBHOOK_SECRET,
         // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     },
 })

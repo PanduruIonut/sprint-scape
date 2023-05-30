@@ -5,7 +5,7 @@ import { createTRPCContext } from '@/server/api/trpc'
 import isWebhookSecured from './handler'
 
 const handler: NextApiHandler = async (req, res) => {
-    if (!(await isWebhookSecured(req, res))) {
+    if (!(isWebhookSecured(req as unknown as Request))) {
         res.status(400).json('Invalid webhook')
         return
     }
@@ -28,7 +28,7 @@ const handler: NextApiHandler = async (req, res) => {
             throw new Error(`Invalid event data: ${JSON.stringify(event.data)}`)
         }
         const ctx = createTRPCContext({ req, res })
-        const caller = oranisationsRouter.createCaller(ctx)
+        const caller = oranisationsRouter.createCaller({ ...ctx, userId: created_by })
         let organization
         if (event.type === 'organization.created') {
             organization = await caller.create({
