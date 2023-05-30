@@ -7,6 +7,7 @@ import {
     privateProcedure,
     publicProcedure,
 } from '@/server/api/trpc'
+import { Prisma } from '@prisma/client'
 
 const ratelimit = new Ratelimit({
     redis: Redis.fromEnv(),
@@ -35,9 +36,10 @@ export const facilitiesRouter = createTRPCRouter({
                     name: z.string(),
                     address: z.string(),
                     email: z.string().email(),
-                    description: z.string(),
-                    latitude: z.string(),
-                    longitude: z.string(),
+                    description: z.string().nullable(),
+                    phone: z.string(),
+                    latitude: z.any(),
+                    longitude: z.any(),
                     organisationId: z.string(),
                 }),
             })
@@ -52,9 +54,14 @@ export const facilitiesRouter = createTRPCRouter({
                     name: input.content.name,
                     address: input.content.address,
                     email: input.content.email,
+                    phone: input.content.phone,
                     description: input.content.description,
-                    latitude: input.content.latitude,
-                    longitude: input.content.longitude,
+                    latitude: new Prisma.Decimal(
+                        input.content.latitude as string
+                    ),
+                    longitude: new Prisma.Decimal(
+                        input.content.longitude as string
+                    ),
                     organisation: {
                         connect: {
                             id: input.content.organisationId,

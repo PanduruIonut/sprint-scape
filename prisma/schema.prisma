@@ -39,14 +39,15 @@ model Facility {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String   @unique
-  email    String?
+  email    String
   organisation Organisation? @relation(fields: [organisationId], references: [id])
   organisationId String?
   Venues Venue[]
   bookings  Booking[]
-  latitude String?
-  longitude String?
-  address String?
+  phone String
+  latitude Decimal @db.Decimal(8, 6)
+  longitude Decimal @db.Decimal(9, 6)
+  address String
   description String?
   @@index([organisationId])
 }
@@ -60,8 +61,6 @@ model Venue {
   facilityId String?
   schedules Schedule[]
   bookings  Booking[]
-  latitude String?
-  longitude String?
   address String?
   description String?
   type VenueType

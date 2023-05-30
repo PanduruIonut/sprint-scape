@@ -2,8 +2,13 @@ import type { WebhookEvent } from '@clerk/clerk-sdk-node'
 import { type NextApiHandler } from 'next'
 import { oranisationsRouter } from '@/server/api/routers/organisations'
 import { createTRPCContext } from '@/server/api/trpc'
+import isWebhookSecured from './handler'
 
 const handler: NextApiHandler = async (req, res) => {
+    if (!(await isWebhookSecured(req, res))) {
+        res.status(400).json('Invalid webhook')
+        return
+    }
     try {
         const event = req.body as WebhookEvent
         console.log(typeof event)

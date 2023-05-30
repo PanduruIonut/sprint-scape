@@ -1,5 +1,5 @@
 import { api } from "@/utils/api";
-import { type Facility } from "@prisma/client";
+import { type Facility, Prisma } from "@prisma/client";
 import React, { type FC, useCallback, useState, useEffect, useMemo, useRef } from "react";
 import FacilityPreview from "./facility/preview";
 
@@ -15,8 +15,10 @@ export const Map: FC<{ center: google.maps.LatLngLiteral; zoom: number }> = ({
     const markers = useMemo(() => {
         if (!facilities) return [];
         return facilities.map((facility) => {
-            if (!facility.latitude || !facility.longitude) return null;
-            return { lat: parseFloat(facility.latitude), lng: parseFloat(facility.longitude) };
+            return new google.maps.LatLng({
+                lat: new Prisma.Decimal(facility.latitude).toNumber(),
+                lng: new Prisma.Decimal(facility.longitude).toNumber()
+            });
         })
     }, [facilities]);
 
@@ -25,9 +27,7 @@ export const Map: FC<{ center: google.maps.LatLngLiteral; zoom: number }> = ({
         infoWindow.setContent("You clicked on the marker!");
         infoWindow.open(marker.getMap(), marker);
         setSelectedFacility(facilities?.find((facility) => {
-            if (!facility.latitude || !facility.longitude)
-                return console.warn("No lat or long");
-            return { lat: parseFloat(facility.latitude), lng: parseFloat(facility.longitude) } as google.maps.LatLngLiteral;
+            return { lat: facility.latitude, lng: facility.longitude };
         }))
     }, [facilities]);
 
