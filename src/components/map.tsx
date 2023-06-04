@@ -22,14 +22,26 @@ export const Map: FC<{ center: google.maps.LatLngLiteral; zoom: number }> = ({
         })
     }, [facilities]);
 
-    const handleMarkerClick = useCallback((infoWindow: google.maps.InfoWindow, marker: google.maps.Marker) => {
-        infoWindow.close();
-        infoWindow.setContent("You clicked on the marker!");
-        infoWindow.open(marker.getMap(), marker);
-        setSelectedFacility(facilities?.find((facility) => {
-            return { lat: facility.latitude, lng: facility.longitude };
-        }))
-    }, [facilities]);
+    const handleMarkerClick = useCallback(
+        (infoWindow: google.maps.InfoWindow, marker: google.maps.Marker) => {
+            infoWindow.close();
+            infoWindow.setContent("You clicked on the marker!");
+            infoWindow.open(marker.getMap(), marker);
+
+            const clickedLatLng = marker.getPosition() as google.maps.LatLng;
+            const clickedFacility = facilities?.find((facility) => {
+                const facilityLatLng = new google.maps.LatLng({
+                    lat: new Prisma.Decimal(facility.latitude).toNumber(),
+                    lng: new Prisma.Decimal(facility.longitude).toNumber()
+                });
+                return facilityLatLng.equals(clickedLatLng);
+            });
+
+            setSelectedFacility(clickedFacility);
+        },
+        [facilities]
+    );
+
 
     useEffect(() => {
         if (!window || !ref.current) return
