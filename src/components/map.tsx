@@ -11,6 +11,7 @@ export const Map: FC<{ center: google.maps.LatLngLiteral; zoom: number }> = ({
     const { data: facilities } = api.facility.getAll.useQuery();
     const [selectedFacility, setSelectedFacility] = useState<Facility>();
     const [map, setMap] = useState<google.maps.Map>();
+    const [isFacilityPreviewOpen, setIsFacilityPreviewOpen] = useState(false);
 
     const markers = useMemo(() => {
         if (!facilities) return [];
@@ -25,8 +26,6 @@ export const Map: FC<{ center: google.maps.LatLngLiteral; zoom: number }> = ({
     const handleMarkerClick = useCallback(
         (infoWindow: google.maps.InfoWindow, marker: google.maps.Marker) => {
             infoWindow.close();
-            infoWindow.setContent("You clicked on the marker!");
-            infoWindow.open(marker.getMap(), marker);
 
             const clickedLatLng = marker.getPosition() as google.maps.LatLng;
             const clickedFacility = facilities?.find((facility) => {
@@ -38,10 +37,15 @@ export const Map: FC<{ center: google.maps.LatLngLiteral; zoom: number }> = ({
             });
 
             setSelectedFacility(clickedFacility);
+            setIsFacilityPreviewOpen(true);
         },
         [facilities]
     );
 
+    const handlePreviewClose = useCallback(() => {
+        setIsFacilityPreviewOpen(false);
+        setSelectedFacility(undefined);
+    }, []);
 
     useEffect(() => {
         if (!window || !ref.current) return
@@ -94,12 +98,14 @@ export const Map: FC<{ center: google.maps.LatLngLiteral; zoom: number }> = ({
 
     return (
         <>
-            <FacilityPreview facility={selectedFacility} />
+            {isFacilityPreviewOpen && (
+                <FacilityPreview facility={selectedFacility} onClose={handlePreviewClose} />
+            )}
             <div ref={ref} id="map" style={{ width: "1250px", height: "550px" }} />
         </>
     );
-}
+};
+
 function handleLocationError(_arg0: boolean, _infoWindow: google.maps.InfoWindow) {
     console.warn("Error: The Geolocation service failed.");
 }
-
