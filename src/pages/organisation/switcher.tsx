@@ -16,10 +16,6 @@ export default function Switcher() {
         return null;
     }
 
-    if (!organization) {
-        return null;
-    }
-
     const handleOrgChange = (event: React.FormEvent<HTMLSelectElement>) => {
         const element = event.target as HTMLSelectElement;
         console.log("Setting active organization", element.value)
@@ -40,7 +36,7 @@ export default function Switcher() {
                         <option
                             key={option.value}
                             value={option.value}
-                            defaultChecked={option.value === organization.id}
+                            defaultChecked={option.value === organization?.id}
                         >
                             {option.label}
                         </option>
