@@ -1,6 +1,7 @@
 import { Button, Card, CardBody, CardHeader, Center, FormControl, FormErrorMessage, FormLabel, Input } from "@chakra-ui/react";
 import { useOrganizationList } from "@clerk/nextjs";
 import { Field, type FieldInputProps, Form, Formik, type FormikProps } from "formik";
+import toast from "react-hot-toast";
 
 
 export default function CreateOrganization() {
@@ -14,7 +15,13 @@ export default function CreateOrganization() {
     const handleSubmit = (organisationName: string) => {
         if (!isLoaded) return
         console.log("organizationName", organisationName)
-        const organization = void createOrganization({ name: organisationName });
+        const organization = void createOrganization({ name: organisationName })
+            .then((organization) => {
+                toast.success(`Organization created! ${organization ? organization.name : ''}`);
+            })
+            .catch((e: Error) => {
+                toast.error(`Failed to create organization! ${e.message}`);
+            });
         void setActive({ organization });
     };
     const validateName = (value: string) => {
@@ -68,11 +75,12 @@ export default function CreateOrganization() {
                             email: '',
                             phoneNumber: ''
                         }}
-                        onSubmit={(values: Values, _actions) => {
+                        onSubmit={(values, { resetForm }) => {
                             handleSubmit(values.name)
+                            resetForm()
                         }}
                     >
-                        {(props: FormikProps<Values>) => (
+                        {() => (
                             <Form>
                                 <Field name='name' validate={validateName} >
                                     {({ field, form }: { field: FieldInputProps<string>, form: FormikProps<Values> }) => (
@@ -104,7 +112,6 @@ export default function CreateOrganization() {
                                 <Button
                                     mt={4}
                                     colorScheme='blue'
-                                    isLoading={props.isSubmitting}
                                     type='submit'
                                 >
                                     Submit
