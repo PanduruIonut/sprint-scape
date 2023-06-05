@@ -48,7 +48,7 @@ model Facility {
   updatedAt        DateTime           @updatedAt
   name             String             @unique
   email            String
-  organization     Organisation       @relation(fields: [organisationId], references: [id])
+  organisation     Organisation       @relation(fields: [organisationId], references: [id])
   organisationId   String
   venues           Venue[]
   bookings         Booking[]
