@@ -39,7 +39,7 @@ model Activity {
   name        String
   description String?
   type        ActivityType
-  venues      VenueActivity[]
+  venues      Venue[]
 }
 
 model Facility {
@@ -74,20 +74,9 @@ model Venue {
   description        String?
   type               VenueType
   maxPlayersCapacity Int?
-  activities         VenueActivity[]
+  activities         Activity[]
 
   @@index([facilityId])
-}
-
-model VenueActivity {
-  venue      Venue    @relation(fields: [venueId], references: [id])
-  venueId    String
-  activity   Activity @relation(fields: [activityId], references: [id])
-  activityId String
-
-  @@id([venueId, activityId])
-  @@index([venueId])
-  @@index([activityId])
 }
 
 model Booking {
