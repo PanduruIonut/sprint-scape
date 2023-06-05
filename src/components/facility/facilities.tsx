@@ -2,6 +2,7 @@
 import { api } from "@/utils/api";
 import { useOrganization } from "@clerk/nextjs";
 import { type Facility } from "@prisma/client";
+import Link from "next/link";
 
 export default function Facilities() {
     const { organization, isLoaded } = useOrganization();
@@ -14,7 +15,9 @@ export default function Facilities() {
                     <h1>Facilities for {organization.name}</h1>
                     <ul>
                         {facilities.data?.map((facility: Facility) => (
-                            <li key={facility.id}>{facility.name}</li>
+                            <Link href={`/admin/organisations/${organization.id}/facilities/${facility.id}`} key={facility.id}>
+                                <li key={facility.id}>{facility.name}</li>
+                            </Link>
                         ))}
                     </ul>
                 </div>

@@ -20,7 +20,7 @@ const OrganizationList = () => {
                             {organizationList.map(({ organization }) => (
                                 <ListItem key={organization.id}>
                                     <Link
-                                        href={`/organisation/switcher?selected=${organization.id}`}
+                                        href={`/admin/organisations/${organization.id}`}
                                     >
                                         {organization.name}
                                     </Link>
