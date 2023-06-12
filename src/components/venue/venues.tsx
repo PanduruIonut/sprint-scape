@@ -4,7 +4,7 @@ import CreateVenue from "./create";
 
 export default function Venues({ facilityId }: { facilityId: string }) {
 
-    const { organization } = useOrganization();
+    const { organization, membership } = useOrganization();
     const { data } = api.facility.getOne.useQuery({ facilityId: facilityId });
     if (!organization) return null
     const facilities = api.venue.getAllByFacilityId.useQuery({ facilityId: facilityId });
@@ -19,7 +19,9 @@ export default function Venues({ facilityId }: { facilityId: string }) {
                     </li>
                 ))}
             </ul>
+            {membership?.role === "admin" ? (
             <CreateVenue facilityId={facilityId} />
+            ) : null}
 
         </div>
     )
