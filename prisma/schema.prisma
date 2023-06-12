@@ -34,14 +34,6 @@ model Organisation {
   facilities Facility[]
 }
 
-model Activity {
-  id          String             @id @default(uuid())
-  name        String
-  description String?
-  type        ActivityType
-  venues      Venue[]
-}
-
 model Facility {
   id               String             @id @default(uuid())
   createdAt        DateTime           @default(now())
@@ -106,6 +98,15 @@ model Schedule {
   dayOfWeek Int
   startTime DateTime
   endTime   DateTime
+
+  @@index([venueId])
+}
+
+model Activity {
+  id        String     @id @default(uuid())
+  type      ActivityType
+  venue     Venue?     @relation(fields: [venueId], references: [id])
+  venueId   String?
 
   @@index([venueId])
 }

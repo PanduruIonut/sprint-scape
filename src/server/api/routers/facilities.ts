@@ -16,6 +16,15 @@ const ratelimit = new Ratelimit({
 })
 
 export const facilitiesRouter = createTRPCRouter({
+    getOne: publicProcedure
+        .input(z.object({ facilityId: z.string() }))
+        .query(({ ctx, input }) => {
+            return ctx.prisma.facility.findUnique({
+                where: {
+                    id: input.facilityId,
+                },
+            })
+        }),
     getAll: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.facility.findMany()
     }),
