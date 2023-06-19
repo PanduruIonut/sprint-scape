@@ -9,6 +9,10 @@ export const env = createEnv({
     server: {
         DATABASE_URL: z.string().url(),
         NODE_ENV: z.enum(['development', 'test', 'production']),
+        SECRET_ACCESS_KEY: z.string(),
+        ACCESS_KEY: z.string(),
+        REGION: z.string(),
+        BUCKET_NAME: z.string(),
     },
 
     /**
@@ -31,6 +35,10 @@ export const env = createEnv({
         NODE_ENV: process.env.NODE_ENV,
         NEXT_PUBLIC_GOOGLE_MAPS_API: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API,
         NEXT_PUBLIC_CLERK_WEBHOOK_SECRET: process.env.NEXT_PUBLIC_CLERK_WEBHOOK_SECRET,
+        SECRET_ACCESS_KEY: process.env.SECRET_ACCESS_KEY,
+        ACCESS_KEY: process.env.ACCESS_KEY,
+        REGION: process.env.REGION,
+        BUCKET_NAME: process.env.BUCKET_NAME,
         // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     },
 })

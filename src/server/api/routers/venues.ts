@@ -37,6 +37,7 @@ export const venuesRouter = createTRPCRouter({
                     maxPlayersCapacity: z.number().nullable(),
                     facilityId: z.string(),
                     type: z.nativeEnum(VenueType),
+                    pictures: z.array(z.string()).nullable(),
                 }),
             })
         )
@@ -66,6 +67,11 @@ export const venuesRouter = createTRPCRouter({
                         connect: {
                             id: input.content.facilityId,
                         },
+                    },
+                    pictures: {
+                        connect: input.content.pictures?.map(picture => ({
+                            id: picture,
+                        })),
                     },
                 },
             })

@@ -6,6 +6,7 @@ import { api } from "@/utils/api";
 import { type Venue } from "@prisma/client";
 import { ActivityType, VenueType } from "@prisma/client";
 import { useState } from "react";
+import MyDropzone from "../myDropzone";
 
 export default function CreateVenue({ facilityId }: { facilityId: string }) {
     const activityOptions = Object.values(ActivityType).map((type) => ({
@@ -18,10 +19,13 @@ export default function CreateVenue({ facilityId }: { facilityId: string }) {
     }));
     const [selectedActivity, setSelectedActivity] = useState<ActivityType>("" as ActivityType);
     const [selectedVenueType, setSelectedVenueType] = useState<VenueType>("" as VenueType);
+    const [files, setFiles] = useState<File[]>([]);
     const { organization } = useOrganization();
+    const createPresignedUrl = api.aws.createPresignedUrl.useMutation();
     const { mutate, data } = api.venue.create.useMutation({
         onSuccess: () => {
             console.log("Success")
+
             toast.success(`Venue created! ${data ? data.name : ''}`);
         },
         onError: (e) => {
@@ -34,8 +38,51 @@ export default function CreateVenue({ facilityId }: { facilityId: string }) {
         },
     });
 
-    const onSubmit = (payload: Omit<Venue, 'id' | 'createdAt' | 'updatedAt' | 'facilityId' | 'activities' | 'type'>) => {
+    const onFilesUploaded = (files: File[]) => {
+        setFiles(files);
+    };
+
+    const uploadFiles = async () => {
+        const uploadPromises = files.map((file) => {
+            return createPresignedUrl.mutateAsync({
+                fileName: file.name,
+                fileType: file.type,
+                url: file.name,
+                venueId: data ? data.id : '',
+            });
+        });
+        const result = await Promise.all(uploadPromises);
+        return result;
+
+    }
+    const onSubmit = async (payload: Omit<Venue, 'id' | 'createdAt' | 'updatedAt' | 'facilityId' | 'activities' | 'type'>) => {
         if (!organization) return console.log("No organization")
+        const res = await uploadFiles();
+
+        for (const presignedPost of res) {
+            if (!presignedPost) {
+                console.log('no presignedPost');
+                continue;
+            }
+
+            if (!presignedPost) console.log('no presignedPost')
+            const { url, fields } = presignedPost;
+            const formData = new FormData();
+            Object.entries({ ...fields, file: files[0] }).forEach(([key, value]) => {
+                formData.append(key, value as string | Blob);
+            });
+            await fetch(url, {
+                method: "POST",
+                body: formData,
+            }).catch((error) => {
+                console.log('error on uploading', error)
+            });
+        }
+        const venuePictures: string[] = res.map((picture) => {
+            if (!picture) return ''
+            if (picture.fields && picture.fields.key) return picture.fields.key
+            return ''
+        });
 
         mutate({
             content: {
@@ -43,6 +90,8 @@ export default function CreateVenue({ facilityId }: { facilityId: string }) {
                 facilityId: facilityId,
                 activities: selectedActivity ? [selectedActivity] : [],
                 type: selectedVenueType,
+                pictures: venuePictures ? venuePictures : null,
+
             }
         });
     };
@@ -128,6 +177,7 @@ export default function CreateVenue({ facilityId }: { facilityId: string }) {
                                         </option>
                                     ))}
                                 </Select>
+                                <MyDropzone onFilesUploaded={(files) => onFilesUploaded(files)} />
                                 <div style={{ textAlign: 'center', padding: '10px' }}>
                                     <Button type="submit">
                                         Create

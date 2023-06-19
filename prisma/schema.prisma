@@ -66,9 +66,20 @@ model Venue {
   description        String?
   type               VenueType
   maxPlayersCapacity Int?
+  pictures           Picture[]
   activities         Activity[]
 
   @@index([facilityId])
+}
+model Picture {
+  id      String   @id @default(uuid())
+  url     String?
+  venue   Venue?    @relation(fields: [venueId], references: [id])
+  venueId String?
+  fileName String
+  fileType String
+
+  @@index([venueId])
 }
 
 model Booking {
