@@ -76,4 +76,14 @@ export const venuesRouter = createTRPCRouter({
                 },
             })
         }),
+        getOne: publicProcedure
+        .input(z.object({ id: z.string() }))
+        .query(({ ctx, input }) => {
+            return ctx.prisma.venue.findUnique({
+                where: {
+                    id: input.id,
+                },
+            })
+        }
+    ),
 })

@@ -9,6 +9,9 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Toaster } from "react-hot-toast";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { env } from "@/env.mjs";
+import "@fullcalendar/common/main.css";
+// import "@fullcalendar/daygrid/main.css";
+// import "@fullcalendar/timegrid/main.css";
 
 const publicPages = ["/sign-in/[[...index]]", "/sign-up/[[...index]]"];
 

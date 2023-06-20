@@ -4,6 +4,7 @@ import { usersRouter } from '@/server/api/routers/users'
 import { facilitiesRouter } from './routers/facilities'
 import { venuesRouter } from './routers/venues'
 import { awsRouter } from "./routers/aws";
+import { bookingsRouter } from "./routers/bookings";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
         user: usersRouter,
         facility: facilitiesRouter,
         venue: venuesRouter,
+        booking: bookingsRouter,
     })
 
 // export type definition of API
