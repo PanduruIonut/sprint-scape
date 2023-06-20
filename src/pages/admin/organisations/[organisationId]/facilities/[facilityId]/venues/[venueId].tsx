@@ -41,6 +41,10 @@ export default function Venue() {
             toast.success(`Booking created! ${data ? data.startTime.toString() : ''}`);
         },
         onError: (e) => {
+            if (e.message) {
+                toast.error(e.message)
+                return
+            }
             const errorMessage = e.data?.zodError?.fieldErrors.content;
             if (errorMessage && errorMessage[0]) {
                 toast.error(errorMessage[0]);

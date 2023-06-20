@@ -34,16 +34,10 @@ export const bookingsRouter = createTRPCRouter({
                     venueId: input.content.venueId,
                 },
             })
-            const startTime = new Date(input.content.startTime)
-            const endTime = new Date(input.content.endTime)
             const isAvailable = bookings.every(booking => {
-                const bookingStartTime = new Date(booking.startTime)
-                const bookingEndTime = new Date(booking.endTime)
                 return (
-                    startTime < bookingStartTime ||
-                    endTime > bookingEndTime ||
-                    startTime > bookingEndTime ||
-                    endTime < bookingStartTime
+                    input.content.endTime <= booking.startTime ||
+                    input.content.startTime >= booking.endTime
                 )
             })
             if (!isAvailable) {
