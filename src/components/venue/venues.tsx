@@ -7,6 +7,8 @@ export default function Venues({ facilityId }: { facilityId: string }) {
 
     const { organization, membership } = useOrganization();
     const { data } = api.facility.getOne.useQuery({ facilityId: facilityId });
+    const isAdmin = membership?.role === "admin";
+
     if (!organization) return null
     const venues = api.venue.getAllByFacilityId.useQuery({ facilityId: facilityId });
     console.log(venues.data)
@@ -17,7 +19,10 @@ export default function Venues({ facilityId }: { facilityId: string }) {
                 {venues.data?.map((venue) => (
                     <ListItem key={organization.id}>
                         <Link
-                            href={`/admin/organisations/${data ? data.organisationId : ''}/facilities/${facilityId}/venues/${venue.id}`}
+                            href={
+                                isAdmin ? `/admin/organisations/${data ? data.organisationId : ''}/facilities/${facilityId}/venues/${venue.id}`
+                                    : `/facilities/${facilityId}/venues/${venue.id}`
+                            }
                         >
                             {venue.name}
                         </Link>
