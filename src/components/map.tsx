@@ -73,8 +73,8 @@ export const Map: FC<{ center: google.maps.LatLngLiteral; zoom: number }> = ({
             navigator.geolocation.getCurrentPosition(
                 (position: GeolocationPosition) => {
                     const pos = {
-                        lat: 45.8079847563978,
-                        lng: 24.1451755700399,
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
                     };
 
                     infoWindow.setPosition(pos);
