@@ -16,6 +16,32 @@ const ratelimit = new Ratelimit({
 })
 
 export const facilitiesRouter = createTRPCRouter({
+    getAllActivities: publicProcedure
+        .input(z.object({ facilityId: z.string() }))
+        .query(async ({ ctx, input }) => {
+            const facility = await ctx.prisma.facility.findUnique({
+                where: {
+                    id: input.facilityId,
+                },
+                include: {
+                    venues: {
+                        include: {
+                            activities: true,
+                        },
+                    },
+                },
+            })
+
+            if (!facility) {
+                throw new Error('Facility not found')
+            }
+
+            const activities = facility.venues.flatMap(
+                venue => venue.activities
+            )
+
+            return activities
+        }),
     getOne: publicProcedure
         .input(z.object({ facilityId: z.string() }))
         .query(({ ctx, input }) => {

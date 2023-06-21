@@ -1,12 +1,16 @@
+import { api } from "@/utils/api";
 import { Button, Card, CardBody, CardFooter, Image } from "@chakra-ui/react";
 import { type Facility } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import ActivityTags from "../activityTags";
 
 export default function FacilityPreview({ facility, onClose }: { facility: Facility | undefined, onClose: () => void }) {
     const [isOpen, setIsOpen] = useState(true)
     const router = useRouter();
     if (!facility) return null;
+    const activities = api.facility.getAllActivities.useQuery({ facilityId: facility.id })
+    console.log(activities)
 
     function closeDialog() {
         setIsOpen(false);
@@ -37,6 +41,8 @@ export default function FacilityPreview({ facility, onClose }: { facility: Facil
                 <p style={{ fontSize: '17', fontWeight: 'bold', padding: '8px' }}>{facility.name}</p>
                 <p style={{ fontStyle: 'italic', padding: '8px', fontSize: '11px' }}>{facility.address}</p>
                 <p>{facility.description}</p>
+                <ActivityTags activities={activities.data || []} />
+
             </CardBody>
             <CardFooter justifyContent={'center'}>
                 <Button onClick={closeDialog}>Close</Button>
