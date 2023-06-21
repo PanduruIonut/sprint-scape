@@ -4,13 +4,16 @@ import { type Facility } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ActivityTags from "../activityTags";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
 export default function FacilityPreview({ facility, onClose }: { facility: Facility | undefined, onClose: () => void }) {
     const [isOpen, setIsOpen] = useState(true)
     const router = useRouter();
     if (!facility) return null;
     const activities = api.facility.getAllActivities.useQuery({ facilityId: facility.id })
-    console.log(activities)
+    const venuesPictures = api.aws.getAllFacilityVenuesPicturesSignedUrls.useQuery({ facilityId: facility.id })
+    console.log(venuesPictures.data)
 
     function closeDialog() {
         setIsOpen(false);
@@ -37,7 +40,19 @@ export default function FacilityPreview({ facility, onClose }: { facility: Facil
             justifyContent: 'center',
         }} boxShadow='2xl' variant='outline'>
             <CardBody style={{}}>
-                <Image alt="" src="https://www.abonamentesali.ro/storage/gyms/green-diamond-sala-fitness-sibiu-esx-01-20210812-184505-291.jpg" style={{ textAlign: 'center' }} />
+                <Swiper
+                    spaceBetween={50}
+                    slidesPerView={1}
+                    onSlideChange={() => console.log('slide change')}
+                    onSwiper={(swiper) => console.log(swiper)}
+                    centeredSlides={true}
+                >
+                    {venuesPictures.data?.map((picture) => (
+                        <SwiperSlide key={picture} style={{ textAlign: 'center', justifyContent: 'center' }}>
+                            <Image alt="" src={picture} />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
                 <p style={{ fontSize: '17', fontWeight: 'bold', padding: '8px' }}>{facility.name}</p>
                 <p style={{ fontStyle: 'italic', padding: '8px', fontSize: '11px' }}>{facility.address}</p>
                 <p>{facility.description}</p>

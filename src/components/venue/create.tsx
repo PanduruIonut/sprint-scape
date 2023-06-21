@@ -47,7 +47,6 @@ export default function CreateVenue({ facilityId }: { facilityId: string }) {
             return createPresignedUrl.mutateAsync({
                 fileName: file.name,
                 fileType: file.type,
-                url: file.name,
                 venueId: data ? data.id : '',
             });
         });

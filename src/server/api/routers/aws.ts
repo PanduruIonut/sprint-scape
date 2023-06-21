@@ -34,7 +34,6 @@ export const awsRouter = createTRPCRouter({
     createPresignedUrl: privateProcedure
         .input(
             z.object({
-                url: z.string().nullable(),
                 venueId: z.string().nullable(),
                 fileType: z.string(),
                 fileName: z.string(),
@@ -47,11 +46,15 @@ export const awsRouter = createTRPCRouter({
             }
             const picture = await ctx.prisma.picture.create({
                 data: {
-                    url: input?.url,
                     venueId: input?.venueId,
                     fileName: input.fileName,
                     fileType: input.fileType,
                 },
+            })
+            const url = `https://${env.BUCKET_NAME}.s3.${env.REGION}.amazonaws.com/${picture.id}`
+            await ctx.prisma.picture.update({
+                where: { id: picture.id },
+                data: { url },
             })
 
             try {
@@ -97,5 +100,29 @@ export const awsRouter = createTRPCRouter({
                 Key: input.key,
             })
             await s3.send(command)
+        }),
+    getAllFacilityVenuesPicturesSignedUrls: publicProcedure
+        .input(z.object({ facilityId: z.string() }))
+        .query(async ({ input, ctx }) => {
+            const pictures = await ctx.prisma.picture.findMany({
+                where: {
+                    venue: {
+                        facilityId: input.facilityId,
+                    },
+                },
+            })
+            const urls = await Promise.all(
+                pictures.map(async picture => {
+                    const command = new GetObjectCommand({
+                        Bucket: env.BUCKET_NAME,
+                        Key: picture.id,
+                    })
+                    const url = await awsGetSignedUrl(s3, command, {
+                        expiresIn: 15 * 60,
+                    }) // expires in seconds
+                    return url
+                })
+            )
+            return urls
         }),
 })
