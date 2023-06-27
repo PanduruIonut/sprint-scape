@@ -120,7 +120,7 @@ export const awsRouter = createTRPCRouter({
                     const url = await awsGetSignedUrl(s3, command, {
                         expiresIn: 15 * 60,
                     }) // expires in seconds
-                    return url
+                    return { venueId: picture.venueId, url }
                 })
             )
             return urls

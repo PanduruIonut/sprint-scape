@@ -18,12 +18,15 @@ const ratelimit = new Ratelimit({
 
 export const venuesRouter = createTRPCRouter({
     getAllByFacilityId: publicProcedure
-        .input(z.object({ facilityId: z.string() }))
+        .input(z.object({ facilityId: z.string(), pictures: z.boolean().nullable() }))
         .query(({ ctx, input }) => {
             return ctx.prisma.venue.findMany({
                 where: {
                     facilityId: input.facilityId,
                 },
+                include:{
+                    pictures: input.pictures ? true : false,
+                }
             })
         }),
     create: privateProcedure

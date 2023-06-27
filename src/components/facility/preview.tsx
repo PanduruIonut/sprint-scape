@@ -13,7 +13,6 @@ export default function FacilityPreview({ facility, onClose }: { facility: Facil
     if (!facility) return null;
     const activities = api.facility.getAllActivities.useQuery({ facilityId: facility.id })
     const venuesPictures = api.aws.getAllFacilityVenuesPicturesSignedUrls.useQuery({ facilityId: facility.id })
-    console.log(venuesPictures.data)
 
     function closeDialog() {
         setIsOpen(false);
@@ -48,8 +47,8 @@ export default function FacilityPreview({ facility, onClose }: { facility: Facil
                     centeredSlides={true}
                 >
                     {venuesPictures.data?.map((picture) => (
-                        <SwiperSlide key={picture} style={{ textAlign: 'center', justifyContent: 'center' }}>
-                            <Image alt="" src={picture} />
+                        <SwiperSlide key={picture.url} style={{ textAlign: 'center', justifyContent: 'center' }}>
+                            <Image alt="" src={picture.url} />
                         </SwiperSlide>
                     ))}
                 </Swiper>
