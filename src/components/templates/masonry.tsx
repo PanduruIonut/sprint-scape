@@ -1,7 +1,8 @@
 import { api } from "@/utils/api";
 import { Box, Image, Input } from "@chakra-ui/react";
 import { type Venue } from "@prisma/client";
-import { useState } from "react";
+import router from "next/router";
+import { useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
 
 const MyMasonryLayout = ({ items, facility }: { items: Venue[], facility: string }) => {
@@ -12,20 +13,39 @@ const MyMasonryLayout = ({ items, facility }: { items: Venue[], facility: string
     };
 
     const [hoveredIndex, setHoveredIndex] = useState<null | number>(null);
+    const [venues, setVenues] = useState<Venue[]>(items);
+    const [searchQuery, setSearchQuery] = useState<string>("");
 
-    const venuesPictures = api.aws.getAllFacilityVenuesPicturesSignedUrls.useQuery({ facilityId: facility })
+    const venuesPictures = api.aws.getAllFacilityVenuesPicturesSignedUrls.useQuery({ facilityId: facility });
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const query = e.target.value.toLowerCase();
+        setSearchQuery(query);
+
+        const filtered = items.filter((item) => {
+            return item.name.toLowerCase().includes(query);
+        });
+
+        setVenues(filtered);
+    };
+    useEffect(() => {
+        setVenues(items);
+    }, [items]);
 
     return (
         <div
             style={{
+                minWidth: "1000px",
+                minHeight: "600px",
                 maxWidth: "1000px",
                 margin: "0 auto",
                 paddingLeft: "20px",
                 paddingRight: "20px",
                 marginBottom: "20px",
-                maxHeight: "calc(100vh - 100px)",
+                maxHeight: "calc(100vh - 200px)",
                 overflowY: "auto",
-                background: "transparent"
+                background: "transparent",
+                transition: "all 0.3s ease"
             }}
         >
             <div
@@ -46,7 +66,9 @@ const MyMasonryLayout = ({ items, facility }: { items: Venue[], facility: string
                     size="sm"
                     width="50%"
                     marginTop={0}
-                    style={{ borderRadius: "27px", textAlign: "center" }}
+                    style={{ borderRadius: "27px", textAlign: "center", transition: "inherit" }}
+                    onChange={handleSearch}
+                    value={searchQuery}
                 />
             </div>
             <Masonry
@@ -57,7 +79,7 @@ const MyMasonryLayout = ({ items, facility }: { items: Venue[], facility: string
                     backdropFilter: "blur(8px)"
                 }}
             >
-                {items?.map((item, index) => (
+                {venues?.map((item, index) => (
                     <Box
                         key={index}
                         p={1}
@@ -66,6 +88,9 @@ const MyMasonryLayout = ({ items, facility }: { items: Venue[], facility: string
                         position="relative"
                         onMouseEnter={() => setHoveredIndex(index)}
                         onMouseLeave={() => setHoveredIndex(null)}
+                        onClick={() => {
+                            void router.push(`/facilities/${facility}/venues/${item.id}`);
+                        }}
                     >
                         <Box
                             position="absolute"
@@ -81,8 +106,8 @@ const MyMasonryLayout = ({ items, facility }: { items: Venue[], facility: string
                             {item?.name}
                         </Box>
                         <Image
-                            src={venuesPictures?.data?.[index]?.url ?? "https://via.placeholder.com/300x200.png?text=No+Image+Available"}
-                            alt=''
+                            src={venuesPictures?.data?.find((pic) => pic.venueId === item.id)?.url ?? "https://via.placeholder.com/300x200.png?text=No+Image+Available"}
+                            alt=""
                             objectFit="cover"
                             height="200px"
                         />
@@ -107,7 +132,7 @@ const MyMasonryLayout = ({ items, facility }: { items: Venue[], facility: string
                                 _hover={{ opacity: 1 }}
                             >
                                 <span>Capacity: {item.maxPlayersCapacity}</span>
-                                <span> Address: {item.address}</span>
+                                <span>Address: {item.address}</span>
                                 <span>{item.type}</span>
                             </Box>
                         )}
