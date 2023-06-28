@@ -1,22 +1,20 @@
-import { api } from "@/utils/api";
-import { Box, Image, Input } from "@chakra-ui/react";
+import { Input } from "@chakra-ui/react";
 import { type Venue } from "@prisma/client";
-import router from "next/router";
 import { useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
+import VenueCard from "../molecules/venueCard";
 
-const MyMasonryLayout = ({ items, facility }: { items: Venue[], facility: string }) => {
+const MyMasonryLayout = ({ items, promotedVenues }: { items: Venue[], promotedVenues: Venue[] }) => {
     const breakpointColumnsObj = {
         default: 3,
         1100: 2,
         700: 1
     };
 
-    const [hoveredIndex, setHoveredIndex] = useState<null | number>(null);
     const [venues, setVenues] = useState<Venue[]>(items);
+    const [promoVenues, setPromoVenues] = useState<Venue[]>(promotedVenues);
     const [searchQuery, setSearchQuery] = useState<string>("");
 
-    const venuesPictures = api.aws.getAllFacilityVenuesPicturesSignedUrls.useQuery({ facilityId: facility });
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value.toLowerCase();
@@ -28,9 +26,14 @@ const MyMasonryLayout = ({ items, facility }: { items: Venue[], facility: string
 
         setVenues(filtered);
     };
+
     useEffect(() => {
         setVenues(items);
     }, [items]);
+
+    useEffect(() => {
+        setPromoVenues(promotedVenues);
+    }, [promotedVenues]);
 
     return (
         <div
@@ -80,63 +83,10 @@ const MyMasonryLayout = ({ items, facility }: { items: Venue[], facility: string
                 }}
             >
                 {venues?.map((item, index) => (
-                    <Box
-                        key={index}
-                        p={1}
-                        width={"100%"}
-                        maxWidth="600px"
-                        position="relative"
-                        onMouseEnter={() => setHoveredIndex(index)}
-                        onMouseLeave={() => setHoveredIndex(null)}
-                        onClick={() => {
-                            void router.push(`/facilities/${facility}/venues/${item.id}`);
-                        }}
-                    >
-                        <Box
-                            position="absolute"
-                            bottom={0}
-                            left={0}
-                            width="100%"
-                            padding="22px"
-                            color="white"
-                            textAlign="left"
-                            borderRadius="md"
-                            fontSize={30}
-                        >
-                            {item?.name}
-                        </Box>
-                        <Image
-                            src={venuesPictures?.data?.find((pic) => pic.venueId === item.id)?.url ?? "https://via.placeholder.com/300x200.png?text=No+Image+Available"}
-                            alt=""
-                            objectFit="cover"
-                            height="200px"
-                        />
-                        {hoveredIndex === index && (
-                            <Box
-                                position="absolute"
-                                top={0}
-                                left={0}
-                                width="100%"
-                                height="100%"
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="center"
-                                background="rgba(0, 0, 0, 0.7)"
-                                padding="8px"
-                                color="white"
-                                textAlign="center"
-                                borderRadius={12}
-                                opacity={0}
-                                transition="opacity 0.5s ease"
-                                flexDirection="column"
-                                _hover={{ opacity: 1 }}
-                            >
-                                <span>Capacity: {item.maxPlayersCapacity}</span>
-                                <span>Address: {item.address}</span>
-                                <span>{item.type}</span>
-                            </Box>
-                        )}
-                    </Box>
+                    <VenueCard key={index} venue={item} />
+                ))}
+                {promoVenues?.map((item, index) => (
+                    <VenueCard key={index} venue={item} isPromo />
                 ))}
             </Masonry>
         </div>
