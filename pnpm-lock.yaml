@@ -57,6 +57,7 @@ specifiers:
   react-dom: 18.2.0
   react-dropzone: ^14.2.3
   react-hot-toast: ^2.4.1
+  react-icons: ^4.10.1
   react-masonry-css: ^1.0.16
   remove: ^0.1.5
   superjson: 1.12.2
@@ -110,6 +111,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-dropzone: 14.2.3_react@18.2.0
   react-hot-toast: 2.4.1_s7mghcr6idhb4d5ook54gl4n44
+  react-icons: 4.10.1_react@18.2.0
   react-masonry-css: 1.0.16_react@18.2.0
   remove: 0.1.5
   superjson: 1.12.2
@@ -6115,6 +6117,14 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     transitivePeerDependencies:
       - csstype
+    dev: false
+
+  /react-icons/4.10.1_react@18.2.0:
+    resolution: {integrity: sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:
