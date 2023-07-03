@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  position:relative;
 }
 
 .container {
@@ -145,4 +146,31 @@
 
 .loginButton:hover {
   background-color: rgb(255 255 255 / 0.2);
+}
+
+.mapContainer {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.arrowContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left:50%;
+  bottom:55%;
+}
+
+.arrowIcon {
+  font-size: 24px;
+  color: #000;
+  transition: transform 0.3s ease-in-out;
+}
+
+.arrowIcon:hover {
+  transform: scale(1.3);
 }

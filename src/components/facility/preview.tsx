@@ -29,7 +29,7 @@ export default function FacilityPreview({ facility, onClose }: { facility: Facil
         <Card style={{
             display: isOpen ? 'block' : 'none',
             position: 'absolute',
-            top: '57%',
+            top: '75%',
             left: '30%',
             zIndex: 1,
             transform: 'translate(-50%, -50%)',
