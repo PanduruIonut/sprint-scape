@@ -24,7 +24,6 @@ export default function Venue() {
     const venue = api.venue.getOne.useQuery({ id: venueId })
 
     const bookings = api.booking.getAllBookingsForVenue.useQuery({ venueId: venueId })
-    console.log(bookings.data)
     const events = bookings.data?.map((booking) => {
         return {
             title: '',
@@ -36,8 +35,6 @@ export default function Venue() {
 
     const { mutate, data } = api.booking.create.useMutation({
         onSuccess: () => {
-            console.log("Success")
-
             toast.success(`Booking created! ${data ? data.startTime.toString() : ''}`);
         },
         onError: (e) => {
@@ -55,7 +52,6 @@ export default function Venue() {
     });
 
     const createBooking = () => {
-        console.log(bookingTime)
         if (!bookingDate) {
             toast.error("Please select a date")
             return
@@ -111,8 +107,6 @@ export default function Venue() {
         endBookingDateTime.setHours(parseInt(bookingEndTimeHours, 10))
         endBookingDateTime.setMinutes(parseInt(bookingEndTimeMinutes, 10))
 
-        console.log(startBookingDateTime, endBookingDateTime)
-
         if (venue.data?.facilityId === undefined || venue.data?.facilityId === null) {
             toast.error("Venue has no facilityId")
             return
@@ -129,22 +123,31 @@ export default function Venue() {
 
     return (
         <Center height='100vh' width='100vw'>
-            <Card boxShadow='2xl' variant='outline' align='center' minWidth='4xl'>
-                <h1 style={{ fontWeight: 'bold', fontSize: '20px' }}>{venue.data?.name}</h1>
+            <Card boxShadow='2xl' variant='outline' align='center' minWidth='4xl' maxW={'400px'} height='800px' p={30}>
+                <div style={{ padding: '20px' }}>
+                    <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
+                        <h1 style={{ fontWeight: 'bold', fontSize: '20px', margin: '10px' }}>{venue.data?.name}</h1>
                 <span style={{ fontStyle: 'italic' }}>{venue.data?.description}</span>
                 <span>Max Capacity: {venue.data?.maxPlayersCapacity}</span>
                 <span>Type: {venue.data?.type}</span>
-                <FullCalendar
-                    plugins={[timeGridPlugin, interactionPlugin]}
-                    editable
-                    selectable
-                    events={events}
-                />
+                    </div>
+                </div>
+                <div style={{ margin: '1rem', height: '400px', overflow: 'auto' }}>
+                    <FullCalendar
+                        plugins={[timeGridPlugin, interactionPlugin]}
+                        initialView='timeGridWeek'
+                        height='auto'
+                        contentHeight='auto'
+                        aspectRatio={0.5}
+                        events={events}
+                    />
+                </div>
                 <div style={{ display: "flex", width: "100%", justifyContent: 'center' }}>
                     <DatePicker onChange={(value) => setBookingDate(value)} value={bookingDate} calendarIcon={null} clearIcon={null} />
                     <TimeRangePicker onChange={(value) => setBookingTime(value)} value={bookingTime} />
                 </div>
-                <Button onClick={() => createBooking()}>Book</Button>
+
+                <Button m={10} onClick={() => createBooking()}>Book</Button>
             </Card>
         </Center >
     )
