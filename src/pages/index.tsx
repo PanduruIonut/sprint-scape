@@ -54,7 +54,7 @@ function Home() {
               animate={{ opacity: hasScrolled ? 0 : 1, x: hasScrolled ? -20 : 0 }}
               transition={{ duration: 1 }}
             >
-              Sprint <span className={styles.pinkSpan}>Scape</span> App
+              Sprint <span className={styles.pinkSpan}>Scape</span>
             </motion.h1>
           </div>
         </motion.div>

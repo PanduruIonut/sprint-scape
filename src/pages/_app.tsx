@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { env } from "@/env.mjs";
 import "@fullcalendar/common/main.css";
+import Navbar from "@/components/molecules/navbar";
 // import "@fullcalendar/daygrid/main.css";
 // import "@fullcalendar/timegrid/main.css";
 
@@ -28,6 +29,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         ) : (
           <>
               <Wrapper apiKey={env.NEXT_PUBLIC_GOOGLE_MAPS_API}>
+                <Navbar />
                 <SignedIn>
                   <Component {...pageProps} />
                 </SignedIn>

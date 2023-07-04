@@ -123,7 +123,7 @@ export default function Venue() {
 
     return (
         <Center height='100vh' width='100vw'>
-            <Card boxShadow='2xl' variant='outline' align='center' minWidth='4xl' maxW={'400px'} height='800px' p={30}>
+            <Card boxShadow='2xl' variant='outline' align='center' minWidth='3xl' maxW={'400px'} height='700px' p={30}>
                 <div style={{ padding: '20px' }}>
                     <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
                         <h1 style={{ fontWeight: 'bold', fontSize: '20px', margin: '10px' }}>{venue.data?.name}</h1>
