@@ -71,10 +71,10 @@ export const Map: FC<{ center: google.maps.LatLngLiteral; zoom: number }> = ({
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
-                (position: GeolocationPosition) => {
+                (_position: GeolocationPosition) => {
                     const pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
+                        lng: 24.148771,
+                        lat: 45.790225,
                     };
 
                     infoWindow.setPosition(pos);
@@ -83,7 +83,7 @@ export const Map: FC<{ center: google.maps.LatLngLiteral; zoom: number }> = ({
                     new google.maps.Marker({
                         position: pos,
                         map,
-                        label: { text: "You're here!", color: "black", fontSize: "16px" }
+                        label: { text: "Sibiiiu!", color: "black", fontSize: "16px" }
                     });
                 },
                 () => {

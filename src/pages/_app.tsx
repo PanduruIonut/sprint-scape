@@ -14,35 +14,19 @@ import Navbar from "@/components/molecules/navbar";
 // import "@fullcalendar/daygrid/main.css";
 // import "@fullcalendar/timegrid/main.css";
 
-const publicPages = ["/sign-in/[[...index]]", "/sign-up/[[...index]]"];
-
 const MyApp: AppType = ({ Component, pageProps }) => {
 
-  const { pathname } = useRouter();
 
-  const isPublicPage = publicPages.includes(pathname);
   return (
-    <ClerkProvider {...pageProps}>
+    <ClerkProvider>
       <ChakraProvider>
-        {isPublicPage ? (
+        <Wrapper apiKey={env.NEXT_PUBLIC_GOOGLE_MAPS_API}>
+          <Navbar />
           <Component {...pageProps} />
-        ) : (
-          <>
-              <Wrapper apiKey={env.NEXT_PUBLIC_GOOGLE_MAPS_API}>
-                <Navbar />
-                <SignedIn>
-                  <Component {...pageProps} />
-                </SignedIn>
-                <SignedOut>
-                  <RedirectToSignIn />
-                </SignedOut>
-              </Wrapper>
-          </>
-        )}
+        </Wrapper>
         <Toaster position="bottom-center" />
       </ChakraProvider>
     </ClerkProvider>
-  )
+  );
 };
-
 export default api.withTRPC(MyApp);
